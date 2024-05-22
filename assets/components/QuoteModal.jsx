@@ -6,20 +6,23 @@ Modal.setAppElement("#root");
 function QuoteModal({ isOpen, onRequestClose, onSave, quote }) {
     const [content, setContent] = useState(quote ? quote.content : "");
     const [author, setAuthor] = useState(quote ? quote.author : "");
+    const [isVerified, setIsVerified] = useState(quote ? quote.isVerified : false);
 
     useEffect(() => {
         if (quote) {
             setContent(quote.content);
             setAuthor(quote.author);
+            setIsVerified(quote.isVerified);
         } else {
             setContent("");
             setAuthor("");
+            setIsVerified(false);
         }
     }, [quote]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSave({ content, author, id: quote ? quote.id : undefined });
+        onSave({ content, author, isVerified, id: quote ? quote.id : undefined });
     };
 
     return (
@@ -40,6 +43,14 @@ function QuoteModal({ isOpen, onRequestClose, onSave, quote }) {
                         type="text"
                         value={author}
                         onChange={(e) => setAuthor(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <label>Vérifié ?</label>
+                    <input
+                        type="checkbox"
+                        checked={isVerified}
+                        onChange={(e) => setIsVerified(e.target.checked)}
                     />
                 </div>
                 <button type="submit" className="btn-primary">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 const useQuotes = () => {
@@ -6,7 +6,7 @@ const useQuotes = () => {
 
     useEffect(() => {
         fetchQuotes();
-    }, [quotes]);
+    }, []); // Utilisez un tableau de dépendances vide pour exécuter une seule fois
 
     const fetchQuotes = async () => {
         try {

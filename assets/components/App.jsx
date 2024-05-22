@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import QuoteModal from "./QuoteModal";
 import QuoteList from "./QuoteList";
-import useQuotes from "../hooks/useQuotes";
-import useLikeDislike from "../hooks/useLikeDislike";
+import { QuoteContext } from "../context/QuoteContext";
 
 function App() {
-    const { quotes, addQuote, updateQuote, deleteQuote } = useQuotes();
-    const { handleLike, handleDislike } = useLikeDislike(quotes);
+    const { state, fetchQuotes, addQuote, updateQuote, deleteQuote, handleLike, handleDislike } = useContext(QuoteContext);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedQuote, setSelectedQuote] = useState(null);
+
+    useEffect(() => {
+        fetchQuotes();
+    }, []);
 
     const openModal = (quote = null) => {
         setSelectedQuote(quote);
@@ -33,7 +35,7 @@ function App() {
         <div className="max-w-5xl mx-auto min-h-screen py-6 space-y-3">
             <button onClick={() => openModal()} className="btn-primary">Ajouter une citation</button>
             <QuoteList
-                quotes={quotes}
+                quotes={state.quotes}
                 onEdit={openModal}
                 onDelete={deleteQuote}
                 onLike={handleLike}
