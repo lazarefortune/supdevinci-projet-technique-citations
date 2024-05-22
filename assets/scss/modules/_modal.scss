@@ -1,0 +1,7 @@
+.modal {
+  @apply bg-white p-8 rounded shadow-lg mx-auto w-full max-w-lg;
+}
+
+.modal-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center backdrop-blur;
+}

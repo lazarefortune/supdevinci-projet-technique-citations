@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello QuoteController!{% endblock %}
+
+{% block body %}
+    <div id="root"></div>
+
+{#<div class="example-wrapper">#}
+{#    <h1>Hello! ✅</h1>#}
+
+{#    <a href="{{ path('app.quote.create') }}">Create a new quote</a>#}
+{#    <ul>#}
+{#        {% for quote in quotes %}#}
+{#            <li>#}
+{#                {{ quote.content }}#}
+{#                <a href="{{ path('app.quote.edit', {'id': quote.id}) }}">edit</a>#}
+{#                <a href="{{ path('app.quote.delete', {'id': quote.id}) }}">delete</a>#}
+{#                <p>Likes: <span id="likes-{{ quote.id }}">{{ quote.likes }}</span></p>#}
+{#                <p>Dislikes: <span id="dislikes-{{ quote.id }}">{{ quote.dislikes }}</span></p>#}
+{#                <button onclick="likeQuote({{ quote.id }})">Like</button>#}
+{#                <button onclick="dislikeQuote({{ quote.id }})">Dislike</button>#}
+{#            </li>#}
+{#        {% endfor %}#}
+{#    </ul>#}
+
+{#</div>#}
+
+{#    <script>#}
+{#        function likeQuote(id) {#}
+{#            fetch(`/quote/${id}/like`, { method: 'POST' })#}
+{#                .then(response => response.json())#}
+{#                .then(data => {#}
+{#                    if (data.error) {#}
+{#                        alert(data.error);#}
+{#                    } else {#}
+{#                        document.getElementById(`likes-${id}`).innerText = data.likes;#}
+{#                        document.getElementById(`dislikes-${id}`).innerText = data.dislikes;#}
+{#                    }#}
+{#                });#}
+{#        }#}
+
+{#        function dislikeQuote(id) {#}
+{#            fetch(`/quote/${id}/dislike`, { method: 'POST' })#}
+{#                .then(response => response.json())#}
+{#                .then(data => {#}
+{#                    if (data.error) {#}
+{#                        alert(data.error);#}
+{#                    } else {#}
+{#                        document.getElementById(`likes-${id}`).innerText = data.likes;#}
+{#                        document.getElementById(`dislikes-${id}`).innerText = data.dislikes;#}
+{#                    }#}
+{#                });#}
+{#        }#}
+{#    </script>#}
+{% endblock %}
