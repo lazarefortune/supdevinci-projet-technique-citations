@@ -6,7 +6,7 @@ const useQuotes = () => {
 
     useEffect(() => {
         fetchQuotes();
-    }, []); // Utilisez un tableau de dépendances vide pour exécuter une seule fois
+    }, []);
 
     const fetchQuotes = async () => {
         try {

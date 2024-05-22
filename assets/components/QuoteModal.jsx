@@ -30,34 +30,44 @@ function QuoteModal({ isOpen, onRequestClose, onSave, quote }) {
             <h2 className="h3">{quote ? "Modifier la citation" : "Ajouter une citation"}</h2>
             <form onSubmit={handleSubmit} className="stack">
                 <div>
-                    <label>Votre inspiration</label>
-                    <textarea
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Auteur</label>
+                    <label className="text-muted">Auteur</label>
                     <input
                         type="text"
                         value={author}
+                        required
                         onChange={(e) => setAuthor(e.target.value)}
                     />
                 </div>
                 <div>
-                    <label>Vérifié ?</label>
-                    <input
-                        type="checkbox"
-                        checked={isVerified}
-                        onChange={(e) => setIsVerified(e.target.checked)}
+                    <label className="relative inline-flex cursor-pointer items-center">
+                        <input type="checkbox"
+                               className="peer sr-only"
+                               checked={isVerified}
+                               onChange={(e) => setIsVerified(e.target.checked)}
+                        />
+                        <div
+                            className="h-6 w-11 rounded-full bg-slate-100 after:absolute after:top-0.5 after:left-0.5 after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow after:transition-all after:content-[''] hover:bg-slate-200 peer-checked:bg-primary-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-disabled:cursor-not-allowed peer-disabled:bg-slate-100 peer-disabled:after:bg-slate-50"></div>
+                        <span className="ml-3 label text-muted">
+                        Vérifié
+                    </span>
+                    </label>
+                </div>
+                <div>
+                    <label className="text-muted">Votre inspiration</label>
+                    <textarea
+                        value={content}
+                        onChange={(e) => setContent(e.target.value)}
+                        required
+                        rows={10}
                     />
                 </div>
-                <button type="submit" className="btn-primary">
-                    {quote ? "Enregistrer" : "Ajouter la citation"}
-                </button>
+                <div className="flex justify-end space-x-2">
+                    <button onClick={onRequestClose} className="btn-light">Annuler</button>
+                    <button type="submit" className="btn-primary">
+                        Enregistrer
+                    </button>
+                </div>
             </form>
-            <button onClick={onRequestClose} className="btn-light">Fermer</button>
         </Modal>
     );
 }
