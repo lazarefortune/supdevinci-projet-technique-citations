@@ -46,6 +46,7 @@ class Quote
 
     public function __construct()
     {
+        $this->isVerified = false;
         $this->likes = 0;
         $this->dislikes = 0;
         $this->likeDislikes = new ArrayCollection();
