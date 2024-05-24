@@ -7,7 +7,7 @@ export const quoteReducer = (state, action) => {
         case 'SET_QUOTES':
             return { ...state, quotes: action.payload };
         case 'ADD_QUOTE':
-            return { ...state, quotes: [...state.quotes, action.payload] };
+            return { ...state, quotes: [ ...state.quotes, action.payload ] };
         case 'UPDATE_QUOTE':
             return {
                 ...state,
@@ -22,7 +22,13 @@ export const quoteReducer = (state, action) => {
         case 'DISLIKE_QUOTE':
             return {
                 ...state,
-                quotes: state.quotes.map(q => q.id === action.payload.id ? { ...q, likes: action.payload.likes, dislikes: action.payload.dislikes } : q),
+                quotes: state.quotes.map(q => q.id === action.payload.id ?
+                    {
+                        ...q,
+                        likes: action.payload.likes,
+                        dislikes: action.payload.dislikes,
+                        userVote: action.payload.userVote
+                    } : q),
             };
         default:
             return state;

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Modal from "react-modal";
 
 Modal.setAppElement("#root");
 
-function QuoteModal({ isOpen, onRequestClose, onSave, quote }) {
-    const [content, setContent] = useState(quote ? quote.content : "");
-    const [author, setAuthor] = useState(quote ? quote.author : "");
-    const [isVerified, setIsVerified] = useState(quote ? quote.isVerified : false);
+const QuoteModal = ({ isOpen, onRequestClose, onSave, quote }) => {
+    const [ content, setContent ] = useState(quote ? quote.content : "");
+    const [ author, setAuthor ] = useState(quote ? quote.author : "");
+    const [ isVerified, setIsVerified ] = useState(quote ? quote.isVerified : false);
 
     useEffect(() => {
         if (quote) {
@@ -18,15 +18,16 @@ function QuoteModal({ isOpen, onRequestClose, onSave, quote }) {
             setAuthor("");
             setIsVerified(false);
         }
-    }, [quote]);
+    }, [ quote ]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = useCallback((e) => {
         e.preventDefault();
         onSave({ content, author, isVerified, id: quote ? quote.id : undefined });
-    };
+    }, [ content, author, isVerified, onSave, quote ]);
 
     return (
-        <Modal isOpen={isOpen} onRequestClose={onRequestClose} className="modal stack-large" overlayClassName="modal-overlay">
+        <Modal isOpen={isOpen} onRequestClose={onRequestClose} className="modal stack-large"
+               overlayClassName="modal-overlay">
             <h2 className="h3">{quote ? "Modifier la citation" : "Ajouter une citation"}</h2>
             <form onSubmit={handleSubmit} className="stack">
                 <div>
@@ -70,6 +71,6 @@ function QuoteModal({ isOpen, onRequestClose, onSave, quote }) {
             </form>
         </Modal>
     );
-}
+};
 
-export default QuoteModal;
+export default React.memo(QuoteModal);

@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+const API_URL = "/api/quotes";
+
 const useQuotes = () => {
-    const [quotes, setQuotes] = useState([]);
+    const [ quotes, setQuotes ] = useState([]);
 
     useEffect(() => {
         fetchQuotes();
@@ -10,7 +12,7 @@ const useQuotes = () => {
 
     const fetchQuotes = async () => {
         try {
-            const response = await axios.get('/api/quotes/');
+            const response = await axios.get(API_URL + "/");
             setQuotes(response.data.quotes);
         } catch (error) {
             console.error(error);
@@ -19,8 +21,8 @@ const useQuotes = () => {
 
     const addQuote = async (quote) => {
         try {
-            const response = await axios.post('/api/quotes/', quote);
-            setQuotes([...quotes, response.data]);
+            const response = await axios.post(API_URL + "/", quote);
+            setQuotes([ ...quotes, response.data ]);
         } catch (error) {
             console.error(error);
         }
@@ -28,7 +30,7 @@ const useQuotes = () => {
 
     const updateQuote = async (quote) => {
         try {
-            const response = await axios.put(`/api/quotes/${quote.id}`, quote);
+            const response = await axios.put(API_URL + `/${quote.id}`, quote);
             setQuotes(quotes.map(q => (q.id === quote.id ? response.data : q)));
         } catch (error) {
             console.error(error);
@@ -37,7 +39,7 @@ const useQuotes = () => {
 
     const deleteQuote = async (id) => {
         try {
-            await axios.delete(`/api/quotes/${id}`);
+            await axios.delete(API_URL + `/${id}`);
             setQuotes(quotes.filter(q => q.id !== id));
         } catch (error) {
             console.error(error);

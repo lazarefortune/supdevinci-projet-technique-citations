@@ -8,6 +8,7 @@ use App\Domain\Quote\Enum\VoteType;
 use App\Domain\Quote\Repository\LikeDislikeRepository;
 use App\Domain\Quote\Repository\QuoteRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,10 +24,44 @@ class QuoteController extends AbstractController
     }
 
     #[Route('/', name: 'api_quotes', methods: ['GET'])]
-    public function getQuotes(QuoteRepository $quoteRepository): JsonResponse
+    public function getQuotes(
+        LikeDislikeRepository $likeDislikeRepository,
+        QuoteRepository $quoteRepository,
+        Request $request,
+        PaginatorInterface $paginator
+    ): JsonResponse
     {
-        $quotes = $quoteRepository->findBy([], ['likes' => 'DESC', 'dislikes' => 'ASC']);
-        return $this->json(['quotes' => $quotes], Response::HTTP_OK, [], ['groups' => 'quote:read']);
+        $quotes = $paginator->paginate(
+            $quoteRepository->findBy([], ['likes' => 'DESC', 'dislikes' => 'ASC']),
+            $request->query->getInt('page', 1),
+            $request->query->getInt('limit', 10)
+        );
+
+        $quotesData = [];
+        foreach ($quotes as $quote) {
+
+            $userQuoteVote = $likeDislikeRepository->findOneBy(['quote' => $quote, 'ipAddress' => $request->getClientIp()]);
+
+            $quotesData[] = [
+                'id' => $quote->getId(),
+                'content' => $quote->getContent(),
+                'author' => $quote->getAuthor(),
+                'likes' => $quote->getLikes(),
+                'dislikes' => $quote->getDislikes(),
+                'isVerified' => $quote->getIsVerified(),
+                'userVote' => $userQuoteVote ? $userQuoteVote->getVoteType()->value : null
+            ];
+        }
+
+        $response = [
+            'quotes' => $quotesData,
+            'currentPage' => $quotes->getCurrentPageNumber(),
+            'totalItems' => $quotes->getTotalItemCount(),
+            'itemsPerPage' => $quotes->getItemNumberPerPage(),
+            'totalPages' => (int)ceil($quotes->getTotalItemCount() / $quotes->getItemNumberPerPage())
+        ];
+
+        return $this->json($response, Response::HTTP_OK, [], ['groups' => 'quote:read']);
     }
 
     #[Route('/', name: 'api_create_quote', methods: ['POST'])]
@@ -50,7 +85,7 @@ class QuoteController extends AbstractController
     }
 
     #[Route('/{id}', name: 'api_update_quote', methods: ['PUT'])]
-    public function updateQuote(int $id, Request $request, QuoteRepository $quoteRepository): JsonResponse
+    public function updateQuote(int $id, Request $request, LikeDislikeRepository $likeDislikeRepository, QuoteRepository $quoteRepository): JsonResponse
     {
         $quote = $quoteRepository->find($id);
 
@@ -67,7 +102,18 @@ class QuoteController extends AbstractController
 
         $this->em->flush();
 
-        return $this->json($quote, Response::HTTP_OK, [], ['groups' => 'quote:read']);
+        $userVote = $likeDislikeRepository->findOneBy(['quote' => $quote, 'ipAddress' => $request->getClientIp()]);
+        $quoteData = [
+            'id' => $quote->getId(),
+            'content' => $quote->getContent(),
+            'author' => $quote->getAuthor(),
+            'likes' => $quote->getLikes(),
+            'dislikes' => $quote->getDislikes(),
+            'isVerified' => $quote->getIsVerified(),
+            'userVote' => $userVote ? $userVote->getVoteType()->value : null
+        ];
+
+        return $this->json($quoteData, Response::HTTP_OK, [], ['groups' => 'quote:read']);
     }
 
     #[Route('/{id}', name: 'api_delete_quote', methods: ['DELETE'])]
@@ -116,7 +162,15 @@ class QuoteController extends AbstractController
 
         $this->em->flush();
 
-        return $this->json(['likes' => $quote->getLikes(), 'dislikes' => $quote->getDislikes()], Response::HTTP_OK, [], ['groups' => 'quote:read']);
+        $userVote = $likeDislikeRepo->findOneBy(['quote' => $quote, 'ipAddress' => $ipAddress]);
+
+        return $this->json(
+            [
+                'likes' => $quote->getLikes(),
+                'dislikes' => $quote->getDislikes(),
+                'userVote' => $userVote ? $userVote->getVoteType()->value : null
+            ],
+            Response::HTTP_OK, [], ['groups' => 'quote:read']);
     }
 
     private function updateExistingVote(LikeDislike $existingVote, Quote $quote, VoteType $voteType): void
