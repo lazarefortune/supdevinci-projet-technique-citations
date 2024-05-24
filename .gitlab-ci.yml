@@ -36,7 +36,9 @@ setup:
 before_script:
   - apt-get update -yqq
   - apt-get install -yqq postgresql-client
-  - psql -h postgres -U "app" -d "app_test" -c "SELECT 1" || exit 1
+  - echo "*:*:*:$POSTGRES_USER:$POSTGRES_PASSWORD" > ~/.pgpass
+  - chmod 600 ~/.pgpass
+  - psql -h postgres -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 1" || exit 1
 
 test:
   stage: test
@@ -45,7 +47,7 @@ test:
     - php bin/console doctrine:migrations:migrate --env=test
     - php bin/phpunit
   only:
-    - main
+    - beta
 
 deploy:
   stage: deploy
