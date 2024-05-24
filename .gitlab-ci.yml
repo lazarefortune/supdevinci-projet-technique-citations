@@ -36,7 +36,7 @@ setup:
 before_script:
   - apt-get update -yqq
   - apt-get install -yqq postgresql-client
-  - psql -h postgres -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 1" || exit 1
+  - psql -h postgres -U "app" -d "app_test" -c "SELECT 1" || exit 1
 
 test:
   stage: test
