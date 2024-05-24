@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react";
+import { Feather, Plus } from "lucide-react";
 import React, { useCallback, useContext, useState } from "react";
 import QuoteModal from "./QuoteModal";
 import { QuoteContext } from "../context/QuoteContext";
@@ -27,8 +27,8 @@ const AddQuoteButton = () => {
     return (
         <>
             <button onClick={() => openModal()} className="btn-primary">
-                <Plus size={24}/>
-                Ajouter une citation
+                <Feather size={24}/>
+                Ecrire l'histoire
             </button>
             <QuoteModal
                 isOpen={modalIsOpen}

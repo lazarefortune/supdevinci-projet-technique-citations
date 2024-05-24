@@ -10,5 +10,5 @@ body {
   line-height: 1.6;
   scroll-margin: 100px 0 0 0;
   word-break: break-word;
-  @apply bg-slate-50 text-white;
+  @apply bg-slate-50 text-white dark:bg-slate-900 dark:text-black;
 }

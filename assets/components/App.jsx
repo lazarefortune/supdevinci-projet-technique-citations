@@ -3,6 +3,7 @@ import { QuoteContext } from "../context/QuoteContext";
 import QuoteList from "./QuoteList";
 import AddQuoteButton from "./AddQuoteButton";
 import Paginator from "./Paginator";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 function App() {
     const { state, fetchQuotes } = useContext(QuoteContext);
@@ -13,8 +14,9 @@ function App() {
 
     return (
         <div className="max-w-5xl mx-auto min-h-screen py-6 space-y-3">
-            <div className="mb-4">
+            <div className="mb-6 flex justify-between items-center">
                 <AddQuoteButton />
+                <ThemeSwitcher />
             </div>
             <QuoteList quotes={state.quotes}/>
             <Paginator/>

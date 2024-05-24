@@ -10,6 +10,20 @@ cache:
     - vendor/
     - node_modules/
 
+variables:
+  POSTGRES_DB: app_test
+  POSTGRES_USER: app
+  POSTGRES_PASSWORD: password
+  DATABASE_URL: "postgresql://app:password@postgres:5432/app_test"
+
+services:
+  - name: postgres:13
+    alias: postgres
+    command:
+      - "postgres"
+      - "-c"
+      - "max_connections=200"
+
 setup:
   stage: setup
   script:
@@ -19,13 +33,19 @@ setup:
     - curl -sS https://getcomposer.org/installer | php
     - php composer.phar install --prefer-dist --no-ansi --no-interaction --no-scripts
 
+before_script:
+  - apt-get update -yqq
+  - apt-get install -yqq postgresql-client
+  - psql -h postgres -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 1" || exit 1
+
 test:
   stage: test
   script:
+    - php bin/console doctrine:database:create --env=test
+    - php bin/console doctrine:migrations:migrate --env=test
     - php bin/phpunit
-
   only:
-    - beta
+    - main
 
 deploy:
   stage: deploy
