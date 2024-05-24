@@ -28,7 +28,7 @@ const AddQuoteButton = () => {
         <>
             <button onClick={() => openModal()} className="btn-primary">
                 <Feather size={24}/>
-                Ecrire l'histoire
+                Ecrire une citation
             </button>
             <QuoteModal
                 isOpen={modalIsOpen}
