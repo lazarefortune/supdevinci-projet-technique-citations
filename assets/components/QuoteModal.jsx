@@ -24,6 +24,10 @@ const QuoteModal = ({ isOpen, onRequestClose, onSave, quote }) => {
     const handleSubmit = useCallback((e) => {
         e.preventDefault();
         onSave({ content, author, isVerified, id: quote ? quote.id : undefined });
+        // reset form
+        setContent("");
+        setAuthor("");
+        setIsVerified(false);
     }, [ content, author, isVerified, onSave, quote ]);
 
     return (
