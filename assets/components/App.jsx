@@ -19,7 +19,7 @@ function App() {
                 <ThemeSwitcher />
             </div>
             <QuoteList quotes={state.quotes}/>
-            <div className="mt-6">
+            <div className="mt-10">
                 <Paginator/>
             </div>
         </div>
